@@ -48,9 +48,9 @@ public class Main
 	}
 	
 	public static final String APP_NAME = "Java Is OP NetBeans Project";
-	public static final String APP_VERSION = "1.0.0";
+	public static final String APP_VERSION = "1.1.0";
 	
-	public static final int DELAY = 12;
+	public static final int DELAY = 10;
 	public static final Point DRAW_OFFSET = new Point(50, 300);
 	public static final Font DEF_FONT;
 	public static final String STRING_TO_DRAW = "Java is OP";
@@ -200,40 +200,50 @@ public class Main
 							
 //							JOptionPane.showOptionDialog(null, "", STRING_TO_DRAW, JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, new ImageIcon(image), new Object[]{}, null);
 							
-							
+							final String STR = currentMove.moveDataStr();
+							final BufferedImage IMG = textToImage(STR, DEF_FONT);
 							final int
-								HEIGHT = IMAGE_TO_DRAW.getHeight(),
-								WIDTH = IMAGE_TO_DRAW.getWidth();
+								HEIGHT = IMG.getHeight(),
+								WIDTH = IMG.getWidth();
 							
-							System.out.println(
-								"Drawing (" + WIDTH + " x " + HEIGHT + ") pixels");
-							
-							drawLoop:
-							for (int y = 0; y < HEIGHT; y++)
+							BufferedImage[] images = new BufferedImage[STR.length()];
+							for (int i = 0; i < images.length; i++)
 							{
-								for (int x = 0; x < WIDTH; x++)
-								{
-									int px = IMAGE_TO_DRAW.getRGB(x, y);
-									System.out.print("\r\nDRAWING PIXEL (" + x + "," + y + "): \t");
-									Color c = new Color(px);
-									System.out.print(c);
-									
-									float[] f = c.getColorComponents(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
-									System.out.print(" \t" + f[0]);
-									
-									if (f[0] > 0.5)
-										continue;
-									
-									int
-										TRUE_X = DRAW_OFFSET.x + x,
-										TRUE_Y = DRAW_OFFSET.y + y;
-									johnny.mouseMove(TRUE_X, TRUE_Y);
-									johnny.mousePress(KeyEvent.BUTTON1_DOWN_MASK);
-									johnny.mouseRelease(KeyEvent.BUTTON1_DOWN_MASK);
-									johnny.delay(DELAY);
-								}
+								images[i] = textToImage(Character.toString(STR.charAt(i)), DEF_FONT);
 							}
 							
+							System.out.println(
+								"Drawing (" + WIDTH + " x " + HEIGHT + ") pixels worth of " + STR);
+							int widthSoFar = 0;
+							
+							drawLoop:
+							for (int i = 0; i < images.length; i++)
+							{
+								int h = images[i].getHeight(),
+									w = images[i].getWidth();
+								for (int y = 0; y < h; y++)
+									for (int x = 0; x < w; x++)
+									{
+										int px = images[i].getRGB(x, y);
+//									System.out.print("\r\nDRAWING PIXEL (" + x + "," + y + "): \t");
+										Color c = new Color(px);
+										System.out.print(c);
+
+										float[] f = c.getColorComponents(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
+										System.out.print(" \t" + f[0]);
+
+										if (f[0] > 0.5)
+											continue;
+
+										int TRUE_X = DRAW_OFFSET.x + x + widthSoFar,
+												TRUE_Y = DRAW_OFFSET.y + y;
+										johnny.mouseMove(TRUE_X, TRUE_Y);
+										johnny.mousePress(KeyEvent.BUTTON1_DOWN_MASK);
+										johnny.mouseRelease(KeyEvent.BUTTON1_DOWN_MASK);
+										johnny.delay(DELAY);
+									}
+								widthSoFar += images[i].getWidth();
+							}
 							break;
 						default:
 							throw new AssertionError();
