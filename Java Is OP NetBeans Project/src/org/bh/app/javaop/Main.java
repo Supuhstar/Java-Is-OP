@@ -217,32 +217,29 @@ public class Main
 							int widthSoFar = 0;
 							
 							drawLoop:
-							for (int i = 0; i < images.length; i++)
+							for (BufferedImage image : images)
 							{
-								int h = images[i].getHeight(),
-									w = images[i].getWidth();
-								for (int y = 0; y < h; y++)
+								int h = image.getHeight();
+								int w = image.getWidth();
+								for (int y = 0; y < h;
+												y++)
 									for (int x = 0; x < w; x++)
 									{
-										int px = images[i].getRGB(x, y);
-//									System.out.print("\r\nDRAWING PIXEL (" + x + "," + y + "): \t");
+										int px = image.getRGB(x, y);
 										Color c = new Color(px);
-										System.out.print(c);
-
+//										System.out.print(c);
 										float[] f = c.getColorComponents(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
-										System.out.print(" \t" + f[0]);
-
+//										System.out.print(" \t" + f[0]);
 										if (f[0] > 0.5)
 											continue;
-
 										int TRUE_X = DRAW_OFFSET.x + x + widthSoFar,
-												TRUE_Y = DRAW_OFFSET.y + y;
+											TRUE_Y = DRAW_OFFSET.y + y;
 										johnny.mouseMove(TRUE_X, TRUE_Y);
 										johnny.mousePress(KeyEvent.BUTTON1_DOWN_MASK);
 										johnny.mouseRelease(KeyEvent.BUTTON1_DOWN_MASK);
 										johnny.delay(DELAY);
 									}
-								widthSoFar += images[i].getWidth();
+								widthSoFar += image.getWidth();
 							}
 							break;
 						default:
