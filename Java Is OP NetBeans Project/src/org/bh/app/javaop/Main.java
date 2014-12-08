@@ -48,12 +48,12 @@ public class Main
 	}
 	
 	public static final String APP_NAME = "Java Is OP NetBeans Project";
-	public static final String APP_VERSION = "1.0.0";
+	public static final String APP_VERSION = "1.0.1";
 	
 	public static final int DELAY = 12;
 	public static final Point DRAW_OFFSET = new Point(50, 300);
 	public static final Font DEF_FONT;
-	public static final String STRING_TO_DRAW = "Java is OP";
+	public static final String STRING_TO_DRAW = "Murder";
 	public static final BufferedImage IMAGE_TO_DRAW = textToImage(STRING_TO_DRAW, DEF_FONT);
 	public static final Dimension CANVAS_SIZE =
 		new Dimension(DRAW_OFFSET.x + (IMAGE_TO_DRAW.getWidth()* 2), DRAW_OFFSET.y + (IMAGE_TO_DRAW.getHeight()* 2));
